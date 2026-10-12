@@ -50,6 +50,11 @@ final class Preferences: ObservableObject {
     @Published var theme: SceneTheme { didSet { defaults.set(theme.rawValue, forKey: "theme") } }
     @Published var size: SceneSize { didSet { defaults.set(size.rawValue, forKey: "size") } }
     @Published var floating: Bool { didSet { defaults.set(floating, forKey: "floating") } }
+    /// Whether the introduction has been shown, which happens once, on first launch.
+    var welcomed: Bool {
+        get { defaults.bool(forKey: "welcomed") }
+        set { defaults.set(newValue, forKey: "welcomed") }
+    }
 
     init() {
         display = defaults.string(forKey: "display").flatMap(DisplayMode.init) ?? .wallpaper

@@ -8,6 +8,7 @@ final class Stage {
 
     private let desk = CALayer()
     private let caption = CALayer()
+    private let notice = CALayer()
     private let spare = CALayer()
     private let deck = CALayer()
     private let disc = CALayer()
@@ -59,7 +60,7 @@ final class Stage {
 
     init() {
         let levels: [(CALayer, CGFloat)] = [
-            (desk, Level.desk), (caption, Level.caption), (spare, Level.spare), (deck, Level.deck),
+            (desk, Level.desk), (caption, Level.caption), (notice, Level.caption), (spare, Level.spare), (deck, Level.deck),
             (disc, Level.deck + 1), (sheen, Level.deck + 2), (fader, Level.deck + 3),
             (armShadow, Level.deck + 4), (arm, Level.deck + 5),
         ]
@@ -70,6 +71,7 @@ final class Stage {
         desk.anchorPoint = .zero
         // Drawn at one pixel per point; scaled up sharply, its grain stays grain instead of blurring.
         desk.magnificationFilter = .nearest
+        notice.opacity = 0
     }
 
     // MARK: Layout
@@ -381,9 +383,27 @@ final class Stage {
         armShadow.opacity = armLifted ? 0.36 : 0.55
     }
 
-    func setVolume(_ volume: Double) {
+    /// Animated, the fader glides to its place, as when the player reports a volume of its
+    /// own; under the pointer it should simply follow.
+    func setVolume(_ volume: Double, animated: Bool) {
         self.volume = volume
-        withoutAnimation { positionFader() }
+        CATransaction.begin()
+        CATransaction.setDisableActions(!animated)
+        CATransaction.setAnimationDuration(0.35)
+        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(controlPoints: 0.2, 0.9, 0.3, 1))
+        positionFader()
+        CATransaction.commit()
+    }
+
+    /// Shows a sentence under the deck for a few seconds.
+    func showNotice(_ words: String) {
+        guard isLaidOut else { return }
+        withoutAnimation { show(Illustration.notice(words, palette: palette, pixelsPerMM: pixelsPerMM), in: notice) }
+        let appearance = CAKeyframeAnimation(keyPath: "opacity")
+        appearance.values = [0, 1, 1, 0]
+        appearance.keyTimes = [0, 0.05, 0.88, 1]
+        appearance.duration = 6
+        notice.add(appearance, forKey: "appearance")
     }
 
     private func positionFader() {

@@ -21,6 +21,8 @@ final class SceneView: NSView {
     private let prefs: Preferences
     private let player: Player
     private var gesture: Gesture?
+    /// Scrolling that has not yet added up to a whole step of volume.
+    private var scrollRemainder = 0.0
     private var armTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
 
@@ -33,7 +35,15 @@ final class SceneView: NSView {
         layer?.addSublayer(stage.layer)
 
         prefs.$theme.sink { [weak self] in self?.stage.apply($0) }.store(in: &cancellables)
-        player.$volume.sink { [weak self] in self?.stage.setVolume($0) }.store(in: &cancellables)
+        player.$volume.sink { [weak self] volume in
+            guard let self else { return }
+            if case .fader = self.gesture {
+                self.stage.setVolume(volume, animated: false)
+            } else {
+                self.stage.setVolume(volume, animated: true)
+            }
+        }.store(in: &cancellables)
+        player.notices.receive(on: RunLoop.main).sink { [weak self] in self?.stage.showNotice($0) }.store(in: &cancellables)
         player.$track.sink { [weak self] track in
             self?.stage.setTrack(title: track?.title ?? "", artist: track?.artist ?? "")
         }.store(in: &cancellables)
@@ -159,10 +169,21 @@ final class SceneView: NSView {
     }
 
     /// Scrolling anywhere over the turntable moves the volume fader.
-    func scrolled(at point: CGPoint, deltaY: CGFloat) {
+    func scrolled(at point: CGPoint, by event: NSEvent) {
+        // A flick keeps sending events after the fingers have lifted; only the fingers count.
+        guard event.momentumPhase.isEmpty else { return }
+        if event.phase == .began { scrollRemainder = 0 }
         switch stage.part(at: point) {
         case .fader, .deck, .record, .arm, .button:
-            player.setVolume(player.volume + Double(deltaY) * 0.5)
+            // Up is louder, as it is on the fader, whichever way round the user has scrolling set.
+            let up = Double(event.isDirectionInvertedFromDevice ? -event.scrollingDeltaY : event.scrollingDeltaY)
+            // A trackpad reports points and a mouse wheel notches. Slow scrolling comes as many
+            // small amounts, which are added up until they make a whole step.
+            scrollRemainder += up * (event.hasPreciseScrollingDeltas ? 0.25 : 2)
+            let steps = scrollRemainder.rounded(.towardZero)
+            guard steps != 0 else { return }
+            scrollRemainder -= steps
+            player.setVolume(player.volume + steps)
         case .sleeve, .stack, nil:
             break
         }
@@ -182,5 +203,5 @@ final class SceneView: NSView {
 
     override func mouseUp(with event: NSEvent) { pointerUp(at: location(of: event)) }
 
-    override func scrollWheel(with event: NSEvent) { scrolled(at: location(of: event), deltaY: event.scrollingDeltaY) }
+    override func scrollWheel(with event: NSEvent) { scrolled(at: location(of: event), by: event) }
 }

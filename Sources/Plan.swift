@@ -89,6 +89,9 @@ enum Plan {
     /// Title and artist, set under the cover.
     static let caption = CGRect(x: -584, y: 188, width: 330, height: 62)
 
+    /// A line of explanation, when there is something to explain, under the deck.
+    static let notice = CGRect(x: deck.minX, y: deck.maxY + 15, width: deck.width, height: 25)
+
     /// Everything above, with room for shadows; this is what gets fitted to the window.
     static let bounds = CGRect(x: -622, y: -252, width: 1262, height: 516)
 

@@ -64,6 +64,8 @@ struct Palette {
     var lamplight: CGColor?
     var ink: CGColor
     var quietInk: CGColor
+    /// A notice is a pill in the colour of the ink, with words in the colour of the desk.
+    var notice: (fill: CGColor, words: CGColor)
     var night: Bool
     /// Nothing behind the deck but the user's own wallpaper.
     var bare: Bool
@@ -83,17 +85,22 @@ struct Palette {
             lamplight = nil
             ink = Tone(lightness: 0.24, chroma: 0.035, hue: hue).color()
             quietInk = Tone(lightness: 0.24, chroma: 0.035, hue: hue).color(alpha: 0.62)
+            notice = (Tone(lightness: 0.27, chroma: 0.04, hue: hue).color(alpha: 0.92),
+                      Tone(lightness: 0.96, chroma: 0.012, hue: hue).color())
         case .midnight:
             desk = (Tone(lightness: 0.2, chroma: 0.012 + 0.03 * strength, hue: hue).color(),
                     Tone(lightness: 0.14, chroma: 0.01 + 0.025 * strength, hue: hue).color())
             lamplight = Tone(lightness: 0.41, chroma: 0.025 + 0.055 * strength, hue: hue).color()
             ink = Tone(lightness: 0.94, chroma: 0.02, hue: hue).color()
             quietInk = Tone(lightness: 0.94, chroma: 0.02, hue: hue).color(alpha: 0.6)
+            notice = (Tone(lightness: 0.93, chroma: 0.02, hue: hue).color(alpha: 0.94),
+                      Tone(lightness: 0.2, chroma: 0.03, hue: hue).color())
         case .bare:
             desk = (.clear, .clear)
             lamplight = nil
             ink = CGColor(gray: 1, alpha: 0.96)
             quietInk = CGColor(gray: 1, alpha: 0.72)
+            notice = (CGColor(gray: 0, alpha: 0.78), CGColor(gray: 1, alpha: 1))
         }
     }
 

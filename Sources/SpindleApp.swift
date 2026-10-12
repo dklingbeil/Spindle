@@ -8,7 +8,8 @@ struct SpindleApp: App {
 
     var body: some Scene {
         MenuBarExtra("Spindle", systemImage: "record.circle") {
-            MenuContent(prefs: delegate.prefs, player: delegate.player, toggleWindow: delegate.toggleWindow)
+            MenuContent(prefs: delegate.prefs, player: delegate.player, loginItem: delegate.loginItem,
+                        toggleWindow: delegate.toggleWindow, showWelcome: delegate.showWelcome)
         }
     }
 }
@@ -16,14 +17,18 @@ struct SpindleApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let prefs = Preferences()
     let player = Player()
+    let loginItem = LoginItem()
 
     private var window: NSWindow!
+    private var welcomeWindow: NSWindow?
     private var sceneView: SceneView!
     private var cancellables = Set<AnyCancellable>()
     /// Whether the desktop press in progress began on part of the turntable.
     private var trackingDesktopPress = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        guard isInstalled || userAcceptsRunningUninstalled() else { return NSApp.terminate(nil) }
+        player.start()
         sceneView = SceneView(prefs: prefs, player: player)
         sceneView.wantsLayer = true
 
@@ -53,9 +58,49 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.handleDesktop(event)
         }
         window.orderFront(nil)
+        if !prefs.welcomed {
+            prefs.welcomed = true
+            showWelcome()
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+
+    // MARK: First launch
+
+    /// False while Spindle is run straight off its disk image, or from the hidden read-only
+    /// copy macOS makes of a freshly downloaded app that hasn't been moved anywhere. From
+    /// either it can't open at login, and macOS forgets what it has been allowed to do.
+    private var isInstalled: Bool {
+        let path = Bundle.main.bundlePath
+        return !path.hasPrefix("/Volumes/") && !path.contains("/AppTranslocation/")
+    }
+
+    private func userAcceptsRunningUninstalled() -> Bool {
+        let alert = NSAlert()
+        alert.messageText = "Move Spindle to your Applications folder first"
+        alert.informativeText = "Spindle is still running from where it was downloaded. Drag it onto the Applications folder, then open it from there."
+        alert.addButton(withTitle: "Quit")
+        alert.addButton(withTitle: "Open Anyway")
+        NSApp.activate(ignoringOtherApps: true)
+        return alert.runModal() == .alertSecondButtonReturn
+    }
+
+    /// Shows the introduction: on first launch, and whenever it is asked for from the menu.
+    func showWelcome() {
+        if welcomeWindow == nil {
+            let welcome = WelcomeView(loginItem: loginItem) { [weak self] in self?.welcomeWindow?.close() }
+            let window = NSWindow(contentViewController: NSHostingController(rootView: welcome))
+            window.title = "Welcome to Spindle"
+            window.styleMask = [.titled, .closable]
+            window.isReleasedWhenClosed = false
+            window.center()
+            welcomeWindow = window
+        }
+        // Spindle has no Dock icon, so its windows don't come forward unless it is brought forward.
+        NSApp.activate(ignoringOtherApps: true)
+        welcomeWindow?.makeKeyAndOrderFront(nil)
+    }
 
     func toggleWindow() {
         if window.isVisible {
@@ -109,7 +154,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             trackingDesktopPress = false
         case .scrollWheel:
             if Self.desktopIsExposed(at: screenPoint) {
-                sceneView.scrolled(at: point, deltaY: event.scrollingDeltaY)
+                sceneView.scrolled(at: point, by: event)
             }
         default:
             break
@@ -133,12 +178,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+/// Whether Spindle opens at login, as macOS has it registered.
+final class LoginItem: ObservableObject {
+    @Published private(set) var isOn = SMAppService.mainApp.status == .enabled
+
+    func set(_ on: Bool) {
+        do {
+            if on {
+                try SMAppService.mainApp.register()
+            } else {
+                try SMAppService.mainApp.unregister()
+            }
+            isOn = on
+        } catch {
+            NSLog("Launch at login failed: \(error.localizedDescription)")
+        }
+    }
+}
+
+/// Pages of System Settings that Spindle sends people to.
+enum SystemSettings {
+    /// Where the user allows one app to control another.
+    static let automation = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation")!
+    /// Where "Click wallpaper to reveal desktop" is.
+    static let desktopAndDock = URL(string: "x-apple.systempreferences:com.apple.Desktop-Settings.extension")!
+}
+
 struct MenuContent: View {
     @ObservedObject var prefs: Preferences
     @ObservedObject var player: Player
+    @ObservedObject var loginItem: LoginItem
     let toggleWindow: () -> Void
-
-    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+    let showWelcome: () -> Void
 
     var body: some View {
         if let track = player.track {
@@ -149,6 +220,10 @@ struct MenuContent: View {
         Button(player.isPlaying ? "Pause" : "Play", action: player.togglePlayPause)
         Button("Next Track", action: player.next)
         Button("Previous Track", action: player.previous)
+        if let blocked = player.blocked {
+            Divider()
+            Button("Allow Spindle to Control \(blocked.name)…") { NSWorkspace.shared.open(SystemSettings.automation) }
+        }
         Divider()
         Button("Show / Hide Turntable", action: toggleWindow)
         Picker("Display", selection: $prefs.display) {
@@ -163,21 +238,13 @@ struct MenuContent: View {
             }
             Toggle("Float Above Windows", isOn: $prefs.floating)
         }
-        Toggle("Launch at Login", isOn: Binding(
-            get: { launchAtLogin },
-            set: { enabled in
-                do {
-                    if enabled {
-                        try SMAppService.mainApp.register()
-                    } else {
-                        try SMAppService.mainApp.unregister()
-                    }
-                    launchAtLogin = enabled
-                } catch {
-                    NSLog("Launch at login failed: \(error.localizedDescription)")
-                }
-            }
-        ))
+        Toggle("Launch at Login", isOn: Binding(get: { loginItem.isOn }, set: loginItem.set))
+        Divider()
+        Button("How to Use Spindle…", action: showWelcome)
+        Button("About Spindle") {
+            NSApp.activate(ignoringOtherApps: true)
+            NSApp.orderFrontStandardAboutPanel(nil)
+        }
         Divider()
         Button("Quit Spindle") { NSApp.terminate(nil) }
             .keyboardShortcut("q")

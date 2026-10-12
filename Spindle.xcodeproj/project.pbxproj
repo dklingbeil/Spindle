@@ -12,6 +12,7 @@
 		26F7A445427DE3FFA4685446 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E2CAB4FA1A7E292E68E4C /* Preferences.swift */; };
 		2F65326AB9431E253D32D8BC /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7925FB44B67C8200C679698D /* Plan.swift */; };
 		394448B24B8EA5C829112EA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAB37ECA7330117E7C82389A /* Assets.xcassets */; };
+		72F118188807D4E723F3016B /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD148BCA57957EE681570ED /* Welcome.swift */; };
 		9602747D0BFF694AB40188CA /* SpindleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66315A6DABFCD53F29C6F62C /* SpindleApp.swift */; };
 		D132DC29AEEA0336D5721276 /* Stage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98912897E82525CB656337D8 /* Stage.swift */; };
 		D9421289054748D6764CBA12 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D137BC3FA5EAC86DD81CB0 /* Palette.swift */; };
@@ -24,6 +25,7 @@
 		2C3AF5BE2D83ED6894CD7300 /* Spindle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spindle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		578E2CAB4FA1A7E292E68E4C /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		66315A6DABFCD53F29C6F62C /* SpindleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpindleApp.swift; sourceTree = "<group>"; };
+		6BD148BCA57957EE681570ED /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
 		7925FB44B67C8200C679698D /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
 		98912897E82525CB656337D8 /* Stage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stage.swift; sourceTree = "<group>"; };
 		A6956129A3B1A6B7E456E99C /* Illustration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Illustration.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				1FE3BAC665B80B3ED667D295 /* SceneView.swift */,
 				66315A6DABFCD53F29C6F62C /* SpindleApp.swift */,
 				98912897E82525CB656337D8 /* Stage.swift */,
+				6BD148BCA57957EE681570ED /* Welcome.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 				166F42FE000C20A3D91810E6 /* SceneView.swift in Sources */,
 				9602747D0BFF694AB40188CA /* SpindleApp.swift in Sources */,
 				D132DC29AEEA0336D5721276 /* Stage.swift in Sources */,
+				72F118188807D4E723F3016B /* Welcome.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

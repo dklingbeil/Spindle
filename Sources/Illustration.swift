@@ -547,6 +547,19 @@ enum Illustration {
         }
     }
 
+    /// A sentence in a pill, for telling the listener something the picture can't.
+    static func notice(_ words: String, palette: Palette, pixelsPerMM: CGFloat) -> Sprite {
+        Sprite(Plan.notice.insetBy(dx: -30, dy: -16), pixelsPerMM: pixelsPerMM) { g in
+            let size: CGFloat = 9.6
+            let width = min(g.width(of: words, size: size, weight: .medium) + 32, Plan.notice.width + 50)
+            let pill = CGRect(x: Plan.notice.midX - width / 2, y: Plan.notice.minY, width: width, height: Plan.notice.height)
+            let shape = CGPath(roundedRect: pill, cornerWidth: pill.height / 2, cornerHeight: pill.height / 2, transform: nil)
+            g.shadowed(dx: 2, dy: 4, blur: 10, alpha: 0.26) { g.fill(shape, palette.notice.fill) }
+            g.text(words, at: CGPoint(x: pill.midX, y: pill.midY + size * 0.35), size: size, weight: .medium,
+                   color: palette.notice.words, align: .center, maxWidth: width - 26)
+        }
+    }
+
     // MARK: Desk
 
     /// The surface under everything, `size` pixels across, with the deck's centre at `origin`.
@@ -820,19 +833,29 @@ private extension CGContext {
         restoreGState()
     }
 
-    /// One line of text with its baseline at `point`, shortened with an ellipsis past `maxWidth`.
-    func text(_ string: String, at point: CGPoint, size: CGFloat, weight: NSFont.Weight, color: CGColor,
-              tracking: CGFloat = 0, align: Alignment = .left, maxWidth: CGFloat? = nil) {
+    /// How wide `string` would be drawn by `text`.
+    func width(of string: String, size: CGFloat, weight: NSFont.Weight, tracking: CGFloat = 0) -> CGFloat {
+        let line = typeset(string, size: size, weight: weight, color: CGColor(gray: 0, alpha: 1), tracking: tracking)
+        return CGFloat(CTLineGetTypographicBounds(line, nil, nil, nil))
+    }
+
+    private func typeset(_ string: String, size: CGFloat, weight: NSFont.Weight, color: CGColor, tracking: CGFloat,
+                         maxWidth: CGFloat? = nil) -> CTLine {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: size, weight: weight),
             NSAttributedString.Key(kCTForegroundColorAttributeName as String): color,
             .kern: tracking,
         ]
-        var line = CTLineCreateWithAttributedString(NSAttributedString(string: string, attributes: attributes))
-        if let maxWidth, CTLineGetTypographicBounds(line, nil, nil, nil) > Double(maxWidth) {
-            let ellipsis = CTLineCreateWithAttributedString(NSAttributedString(string: "…", attributes: attributes))
-            line = CTLineCreateTruncatedLine(line, Double(maxWidth), .end, ellipsis) ?? line
-        }
+        let line = CTLineCreateWithAttributedString(NSAttributedString(string: string, attributes: attributes))
+        guard let maxWidth, CTLineGetTypographicBounds(line, nil, nil, nil) > Double(maxWidth) else { return line }
+        let ellipsis = CTLineCreateWithAttributedString(NSAttributedString(string: "…", attributes: attributes))
+        return CTLineCreateTruncatedLine(line, Double(maxWidth), .end, ellipsis) ?? line
+    }
+
+    /// One line of text with its baseline at `point`, shortened with an ellipsis past `maxWidth`.
+    func text(_ string: String, at point: CGPoint, size: CGFloat, weight: NSFont.Weight, color: CGColor,
+              tracking: CGFloat = 0, align: Alignment = .left, maxWidth: CGFloat? = nil) {
+        let line = typeset(string, size: size, weight: weight, color: color, tracking: tracking, maxWidth: maxWidth)
         let width = CGFloat(CTLineGetTypographicBounds(line, nil, nil, nil))
         let x = switch align {
         case .left: point.x
