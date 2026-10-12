@@ -1,0 +1,376 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		166F42FE000C20A3D91810E6 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE3BAC665B80B3ED667D295 /* SceneView.swift */; };
+		26F7A445427DE3FFA4685446 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E2CAB4FA1A7E292E68E4C /* Preferences.swift */; };
+		394448B24B8EA5C829112EA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAB37ECA7330117E7C82389A /* Assets.xcassets */; };
+		3DDB641296D716AD1BCE6AAC /* wood_table_001_diff.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E61B2FB3572718B5358032 /* wood_table_001_diff.jpg */; };
+		3F2B85843294608118C49951 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9AD81B1B283F21263DFE /* Textures.swift */; };
+		77FBA8E98584BDA14E06ACF9 /* oak_veneer_01_nor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA3A07AB62352A30759DE45A /* oak_veneer_01_nor.jpg */; };
+		7CF350F75825582FFF994D0D /* wood_table_001_rough.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 422C9C6F240613B29DECECE6 /* wood_table_001_rough.jpg */; };
+		895FE23198927EB1F638A351 /* brown_photostudio_02_1k.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 5133BC083E057F396623DA47 /* brown_photostudio_02_1k.hdr */; };
+		91BC63E0372F8D4262D6554C /* oak_veneer_01_diff.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 683BED61C58ADF214B5AFE96 /* oak_veneer_01_diff.jpg */; };
+		9602747D0BFF694AB40188CA /* SpindleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66315A6DABFCD53F29C6F62C /* SpindleApp.swift */; };
+		96B023DAE65CC9C3F3F7C2E4 /* wood_table_001_nor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B287832FD321C4F646013041 /* wood_table_001_nor.jpg */; };
+		A34EF9CAA88964D63749C007 /* oak_veneer_01_rough.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0F316CC2E458ECD11E8597B4 /* oak_veneer_01_rough.jpg */; };
+		A5B7D490C8A7872D0536DDFF /* beige_wall_001_nor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA513D89FFDF88183143E270 /* beige_wall_001_nor.jpg */; };
+		B3F7E364EB88E56796B2FC3F /* beige_wall_001_rough.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B2FD60CAC459FC6993A1A09D /* beige_wall_001_rough.jpg */; };
+		CD729F1893B99D0CBB7D0C98 /* Lathe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E50207851C0B6854B54B742 /* Lathe.swift */; };
+		E21CA1E06C75B1A0A7232C69 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230D47F58C443D20672FDB64 /* Player.swift */; };
+		E469D0CC676761CAB588BB18 /* TurntableScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56974A377D10C7BCB70D7897 /* TurntableScene.swift */; };
+		EFE5A2A069AFB7FF56CB04FE /* beige_wall_001_diff.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F76E4F4959FF470CB6670EF6 /* beige_wall_001_diff.jpg */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0F316CC2E458ECD11E8597B4 /* oak_veneer_01_rough.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = oak_veneer_01_rough.jpg; sourceTree = "<group>"; };
+		1FE3BAC665B80B3ED667D295 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
+		230D47F58C443D20672FDB64 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		2C3AF5BE2D83ED6894CD7300 /* Spindle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spindle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		422C9C6F240613B29DECECE6 /* wood_table_001_rough.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wood_table_001_rough.jpg; sourceTree = "<group>"; };
+		5133BC083E057F396623DA47 /* brown_photostudio_02_1k.hdr */ = {isa = PBXFileReference; path = brown_photostudio_02_1k.hdr; sourceTree = "<group>"; };
+		557D9AD81B1B283F21263DFE /* Textures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
+		56974A377D10C7BCB70D7897 /* TurntableScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurntableScene.swift; sourceTree = "<group>"; };
+		578E2CAB4FA1A7E292E68E4C /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		5E50207851C0B6854B54B742 /* Lathe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lathe.swift; sourceTree = "<group>"; };
+		66315A6DABFCD53F29C6F62C /* SpindleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpindleApp.swift; sourceTree = "<group>"; };
+		683BED61C58ADF214B5AFE96 /* oak_veneer_01_diff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = oak_veneer_01_diff.jpg; sourceTree = "<group>"; };
+		96E61B2FB3572718B5358032 /* wood_table_001_diff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wood_table_001_diff.jpg; sourceTree = "<group>"; };
+		AA513D89FFDF88183143E270 /* beige_wall_001_nor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = beige_wall_001_nor.jpg; sourceTree = "<group>"; };
+		B287832FD321C4F646013041 /* wood_table_001_nor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wood_table_001_nor.jpg; sourceTree = "<group>"; };
+		B2FD60CAC459FC6993A1A09D /* beige_wall_001_rough.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = beige_wall_001_rough.jpg; sourceTree = "<group>"; };
+		F76E4F4959FF470CB6670EF6 /* beige_wall_001_diff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = beige_wall_001_diff.jpg; sourceTree = "<group>"; };
+		FA3A07AB62352A30759DE45A /* oak_veneer_01_nor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = oak_veneer_01_nor.jpg; sourceTree = "<group>"; };
+		FAB37ECA7330117E7C82389A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		034C1E17F3037474BE91C51C = {
+			isa = PBXGroup;
+			children = (
+				C6ED492C3D52106420C14803 /* Sources */,
+				AD78B21A274C131BDEB6F867 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		367F1B0D286EA9E537B11BB1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F76E4F4959FF470CB6670EF6 /* beige_wall_001_diff.jpg */,
+				AA513D89FFDF88183143E270 /* beige_wall_001_nor.jpg */,
+				B2FD60CAC459FC6993A1A09D /* beige_wall_001_rough.jpg */,
+				5133BC083E057F396623DA47 /* brown_photostudio_02_1k.hdr */,
+				683BED61C58ADF214B5AFE96 /* oak_veneer_01_diff.jpg */,
+				FA3A07AB62352A30759DE45A /* oak_veneer_01_nor.jpg */,
+				0F316CC2E458ECD11E8597B4 /* oak_veneer_01_rough.jpg */,
+				96E61B2FB3572718B5358032 /* wood_table_001_diff.jpg */,
+				B287832FD321C4F646013041 /* wood_table_001_nor.jpg */,
+				422C9C6F240613B29DECECE6 /* wood_table_001_rough.jpg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AD78B21A274C131BDEB6F867 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2C3AF5BE2D83ED6894CD7300 /* Spindle.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6ED492C3D52106420C14803 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				FAB37ECA7330117E7C82389A /* Assets.xcassets */,
+				5E50207851C0B6854B54B742 /* Lathe.swift */,
+				230D47F58C443D20672FDB64 /* Player.swift */,
+				578E2CAB4FA1A7E292E68E4C /* Preferences.swift */,
+				1FE3BAC665B80B3ED667D295 /* SceneView.swift */,
+				66315A6DABFCD53F29C6F62C /* SpindleApp.swift */,
+				557D9AD81B1B283F21263DFE /* Textures.swift */,
+				56974A377D10C7BCB70D7897 /* TurntableScene.swift */,
+				367F1B0D286EA9E537B11BB1 /* Resources */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FE13D583E521B1D6554B928B /* Spindle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F69E211887FB92833AEF72B2 /* Build configuration list for PBXNativeTarget "Spindle" */;
+			buildPhases = (
+				3ABF6504162A2C08145AD0CD /* Sources */,
+				706A8EFEA8ABA335FDC8D43E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Spindle;
+			packageProductDependencies = (
+			);
+			productName = Spindle;
+			productReference = 2C3AF5BE2D83ED6894CD7300 /* Spindle.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1769EF89FFF16F71F0F383FD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					FE13D583E521B1D6554B928B = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 3970BC7D75CC38703C422FAD /* Build configuration list for PBXProject "Spindle" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 034C1E17F3037474BE91C51C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AD78B21A274C131BDEB6F867 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FE13D583E521B1D6554B928B /* Spindle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		706A8EFEA8ABA335FDC8D43E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				394448B24B8EA5C829112EA5 /* Assets.xcassets in Resources */,
+				EFE5A2A069AFB7FF56CB04FE /* beige_wall_001_diff.jpg in Resources */,
+				A5B7D490C8A7872D0536DDFF /* beige_wall_001_nor.jpg in Resources */,
+				B3F7E364EB88E56796B2FC3F /* beige_wall_001_rough.jpg in Resources */,
+				895FE23198927EB1F638A351 /* brown_photostudio_02_1k.hdr in Resources */,
+				91BC63E0372F8D4262D6554C /* oak_veneer_01_diff.jpg in Resources */,
+				77FBA8E98584BDA14E06ACF9 /* oak_veneer_01_nor.jpg in Resources */,
+				A34EF9CAA88964D63749C007 /* oak_veneer_01_rough.jpg in Resources */,
+				3DDB641296D716AD1BCE6AAC /* wood_table_001_diff.jpg in Resources */,
+				96B023DAE65CC9C3F3F7C2E4 /* wood_table_001_nor.jpg in Resources */,
+				7CF350F75825582FFF994D0D /* wood_table_001_rough.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3ABF6504162A2C08145AD0CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD729F1893B99D0CBB7D0C98 /* Lathe.swift in Sources */,
+				E21CA1E06C75B1A0A7232C69 /* Player.swift in Sources */,
+				26F7A445427DE3FFA4685446 /* Preferences.swift in Sources */,
+				166F42FE000C20A3D91810E6 /* SceneView.swift in Sources */,
+				9602747D0BFF694AB40188CA /* SpindleApp.swift in Sources */,
+				3F2B85843294608118C49951 /* Textures.swift in Sources */,
+				E469D0CC676761CAB588BB18 /* TurntableScene.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		432C1263759EF048D441065C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		690E5862AD0C9B17C8BA537A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = Support/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dklingbeil.spindle;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8451134413226B7DF04D2556 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CF733F5ACD34594264AC8856 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = Support/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dklingbeil.spindle;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3970BC7D75CC38703C422FAD /* Build configuration list for PBXProject "Spindle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8451134413226B7DF04D2556 /* Debug */,
+				432C1263759EF048D441065C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F69E211887FB92833AEF72B2 /* Build configuration list for PBXNativeTarget "Spindle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF733F5ACD34594264AC8856 /* Debug */,
+				690E5862AD0C9B17C8BA537A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1769EF89FFF16F71F0F383FD /* Project object */;
+}
