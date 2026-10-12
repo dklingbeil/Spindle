@@ -11,8 +11,8 @@ targets:
       path: Support/Info.plist
       properties:
         CFBundleDisplayName: Spindle
-        CFBundleShortVersionString: "1.0.0"
-        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0.1"
+        CFBundleVersion: "2"
         LSUIElement: true
         LSApplicationCategoryType: public.app-category.music
         NSAppleEventsUsageDescription: Spindle controls playback in Spotify and Apple Music when you use the turntable.

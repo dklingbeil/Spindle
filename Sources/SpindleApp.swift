@@ -161,20 +161,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    /// True when no visible window of any app covers this point of the desktop.
+    /// True when a click at this point would land on the desktop rather than on an app's window.
+    ///
+    /// The window server is asked what a click here would hit, which is not the same as what
+    /// covers the point: a visible Dock keeps a see-through window the size of the screen on
+    /// top of everything, and going by what covers the point the desktop would never be exposed.
+    /// The answer leaves out windows that are see-through there or ignore the mouse, Spindle's
+    /// own among them.
     private static func desktopIsExposed(at screenPoint: CGPoint) -> Bool {
-        guard let primary = NSScreen.screens.first,
-              let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)
-                as? [[String: Any]] else { return false }
-        // Window bounds are measured from the top-left of the primary display.
-        let point = CGPoint(x: screenPoint.x, y: primary.frame.maxY - screenPoint.y)
-        return !windows.contains { info in
-            guard let layer = info[kCGWindowLayer as String] as? Int, layer >= 0,
-                  let alpha = info[kCGWindowAlpha as String] as? Double, alpha > 0,
-                  let bounds = info[kCGWindowBounds as String] as? NSDictionary,
-                  let frame = CGRect(dictionaryRepresentation: bounds) else { return false }
-            return frame.contains(point)
-        }
+        let number = NSWindow.windowNumber(at: screenPoint, belowWindowWithWindowNumber: 0)
+        guard number != 0 else { return true }
+        // Anything below the layer ordinary windows live in is part of the desktop: Finder's icons, the wallpaper.
+        let info = (CGWindowListCopyWindowInfo([.optionIncludingWindow], CGWindowID(number)) as? [[String: Any]])?.first
+        return (info?[kCGWindowLayer as String] as? Int).map { $0 < 0 } ?? false
     }
 }
 
