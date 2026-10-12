@@ -1,9 +1,11 @@
 # Spindle
 
-A 3D turntable that lives on your Mac desktop as the wallpaper. It shows what is
-playing in Spotifast, Spotify or Apple Music: the record spins, the tonearm tracks
-the song, the cover sits on a stand, and earlier covers pile up beside the deck.
-The turntable is also the remote: click and drag it to control playback.
+An illustrated turntable that lives on your Mac desktop as the wallpaper, seen from
+straight above so the desktop becomes the desk. It shows what is playing in Spotifast,
+Spotify or Apple Music: the record spins, the tonearm tracks the song, the cover lies
+beside the deck, and earlier covers pile up on the other side. The desk takes its
+colour from the cover. The turntable is also the remote: click and drag it to control
+playback.
 
 ## Requirements
 
@@ -45,7 +47,7 @@ Spindle has no Dock icon. Everything is under the record icon in the menu bar.
 | Play / Pause, Next Track, Previous Track | Controls the active player |
 | Show / Hide Turntable | Hides the scene without quitting |
 | Display | **Desktop Wallpaper** (behind your icons and windows) or a movable **Window** |
-| Scene | **Daylight**, **Midnight**, or **Turntable Only** (no room; sits on your own wallpaper) |
+| Scene | **Daylight** (a sunlit desk), **Midnight** (lamplight), or **Turntable Only** (no desk; sits on your own wallpaper) |
 | Size, Float Above Windows | Window mode only |
 | Launch at Login | Starts Spindle when you log in |
 
@@ -53,12 +55,12 @@ Spindle has no Dock icon. Everything is under the record icon in the menu bar.
 
 | Do this | To |
 | --- | --- |
-| Click the record or the tonearm | Play / pause |
+| Click the record, the tonearm or the Start · Stop button | Play / pause |
 | Drag the tonearm across the record | Seek: outer edge is the start of the track, the label is the end |
 | Drag the tonearm off the record | Pause |
-| Click the cover on the stand | Next track |
-| Click the pile of sleeves | Previous track |
-| Scroll over the turntable, or drag the knob up and down | Volume |
+| Click the cover on the left | Next track |
+| Click the pile of sleeves on the right | Previous track |
+| Scroll over the turntable, or drag the fader up and down | Volume |
 
 In wallpaper mode the scene sits behind your desktop icons, where macOS does not
 deliver clicks. Spindle instead watches for clicks that land on empty desktop
@@ -89,18 +91,18 @@ them too, so dragging the tonearm also draws Finder's selection rectangle, and i
 | File | What is in it |
 | --- | --- |
 | `project.yml` | App name, bundle identifier, version |
-| `Sources/TurntableScene.swift` | The 3D model: every part of the deck, the room, lights and camera |
-| `Sources/Lathe.swift` | Helper that turns a 2D profile into a round part (platter, knob, lamp) |
-| `Sources/Textures.swift` | Textures drawn in code: record grooves, window blinds, default cover |
-| `Sources/Resources/` | Photo-scanned wood and plaster textures and the lighting image |
+| `Sources/Plan.swift` | Where everything sits on the desk, in millimetres, and what counts as a click on each part |
+| `Sources/Illustration.swift` | The artwork, drawn in code: deck, record, tonearm, sleeves, sunlight, default cover |
+| `Sources/Palette.swift` | Picking the desk's colours from the cover |
+| `Sources/Stage.swift` | The layers the artwork lives in and how they move: spin, arm, sleeves sliding to the pile |
 | `Sources/SceneView.swift` | Pointer handling: what clicking and dragging each part does |
 | `Sources/Player.swift` | Talking to Spotifast, Spotify and Apple Music |
 | `Sources/SpindleApp.swift` | Menu bar, the wallpaper window, desktop click forwarding |
 | `Scripts/make-icon.swift` | Draws the app icon |
 
-The model is in centimetres with the desk surface at height 0. To swap a material,
-drop another texture set into `Sources/Resources/` (files named `<name>_diff.jpg`,
-`<name>_nor.jpg`, `<name>_rough.jpg`) and change the name passed to `scanned(...)`.
+Everything is drawn in millimetres measured from the centre of the deck, so the
+artwork stays sharp at any size. The deck's colours are at the top of
+`Illustration.swift`; how light or vivid the desk gets is in `Palette.swift`.
 
 To change the app icon, edit `Scripts/make-icon.swift` and run it from the repository root:
 
@@ -114,9 +116,3 @@ swift Scripts/make-icon.swift
 - Apple Music does not report playback position, so the tonearm assumes each track
   starts from the beginning.
 - The app is not sandboxed or notarised; it is set up for running on your own Mac.
-
-## Credits
-
-Textures and the lighting image are from [Poly Haven](https://polyhaven.com), released
-under CC0 (public domain): `wood_table_001`, `oak_veneer_01`, `beige_wall_001`
-and the HDRI `brown_photostudio_02`.

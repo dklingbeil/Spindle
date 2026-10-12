@@ -1,25 +1,25 @@
+import AppKit
 import Combine
-import SceneKit
 
-/// Shows the scene, keeps it in step with the player, and turns pointer input into playback controls.
+/// Shows the desk, keeps it in step with the player, and turns pointer input into playback controls.
 ///
 /// Pointer input arrives through the `pointer…` methods rather than only AppKit's own mouse
 /// events, because in wallpaper mode the window sits behind the desktop icons and never
 /// receives clicks; the app delegate forwards desktop clicks here instead.
-final class SceneView: SCNView {
-    /// Space to leave under the caption, so the Dock doesn't cover it in wallpaper mode.
-    var captionInset: CGFloat = 14 { didSet { needsLayout = true } }
+final class SceneView: NSView {
+    /// Space taken up by the menu bar and Dock in wallpaper mode, which the desk keeps clear of.
+    var insets = NSEdgeInsets() { didSet { needsLayout = true } }
 
     private enum Gesture {
-        case click(TurntableScene.Part)
-        case arm(start: CGPoint, moved: Bool, angle: Double)
-        case knob(startY: CGFloat, startVolume: Double)
+        case click(Plan.Part)
+        /// `offset` is how far the arm's angle is from the pointer's, so the arm doesn't jump when grabbed.
+        case arm(start: CGPoint, moved: Bool, offset: Double)
+        case fader(startY: CGFloat, startVolume: Double)
     }
 
-    private let stage = TurntableScene()
+    private let stage = Stage()
     private let prefs: Preferences
     private let player: Player
-    private let caption = NSTextField(labelWithString: "")
     private var gesture: Gesture?
     private var armTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
@@ -27,40 +27,27 @@ final class SceneView: SCNView {
     init(prefs: Preferences, player: Player) {
         self.prefs = prefs
         self.player = player
-        super.init(frame: .zero, options: nil)
-        scene = stage.scene
-        pointOfView = stage.cameraNode
-        antialiasingMode = .multisampling4X
-        preferredFramesPerSecond = 30
+        super.init(frame: .zero)
+        layer = CALayer()
+        wantsLayer = true
+        layer?.addSublayer(stage.layer)
 
-        let shadow = NSShadow()
-        shadow.shadowColor = NSColor(white: 0, alpha: 0.7)
-        shadow.shadowBlurRadius = 4
-        shadow.shadowOffset = NSSize(width: 0, height: -1)
-        caption.shadow = shadow
-        caption.textColor = NSColor(white: 1, alpha: 0.92)
-        caption.alignment = .center
-        caption.lineBreakMode = .byTruncatingTail
-        let font = NSFont.systemFont(ofSize: 15, weight: .medium)
-        caption.font = font.fontDescriptor.withDesign(.serif).flatMap { NSFont(descriptor: $0, size: 15) } ?? font
-        addSubview(caption)
-
-        prefs.$theme.sink { [weak self] theme in
-            self?.stage.apply(theme)
-            self?.backgroundColor = theme == .bare ? .clear : .black
-        }.store(in: &cancellables)
-        player.$artwork.sink { [weak self] in self?.stage.setArtwork($0) }.store(in: &cancellables)
-        player.$history.sink { [weak self] in self?.stage.setHistory($0) }.store(in: &cancellables)
+        prefs.$theme.sink { [weak self] in self?.stage.apply($0) }.store(in: &cancellables)
         player.$volume.sink { [weak self] in self?.stage.setVolume($0) }.store(in: &cancellables)
         player.$track.sink { [weak self] track in
-            self?.caption.stringValue = track.map { "\($0.title)  ·  \($0.artist)" } ?? ""
-            self?.needsLayout = true
+            self?.stage.setTrack(title: track?.title ?? "", artist: track?.artist ?? "")
         }.store(in: &cancellables)
-        // Deferred a turn so the player's other properties have settled before they are read.
+        // Deferred a turn so the player's other properties have settled before they are read:
+        // a new cover and the pile it joins change one after the other.
+        player.$artwork.combineLatest(player.$history).receive(on: RunLoop.main).sink { [weak self] _ in
+            guard let self else { return }
+            self.stage.setCovers(playing: self.player.artwork, history: self.player.history)
+        }.store(in: &cancellables)
         player.$isPlaying.receive(on: RunLoop.main).sink { [weak self] playing in
             self?.stage.setSpinning(playing)
             self?.refreshArm(duration: 1.1)
         }.store(in: &cancellables)
+        stage.setCovers(playing: player.artwork, history: player.history)
 
         armTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             guard let self, self.player.isPlaying else { return }
@@ -73,25 +60,33 @@ final class SceneView: SCNView {
 
     override func layout() {
         super.layout()
-        caption.sizeToFit()
-        let width = min(caption.frame.width, bounds.width - 40)
-        caption.frame = NSRect(x: (bounds.width - width) / 2, y: captionInset, width: width, height: caption.frame.height)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        stage.layer.frame = bounds
+        CATransaction.commit()
+        stage.layout(size: bounds.size, insets: insets, backingScale: window?.backingScaleFactor ?? 2)
+    }
+
+    override func setFrameSize(_ newSize: NSSize) {
+        super.setFrameSize(newSize)
+        needsLayout = true
+    }
+
+    override func viewDidChangeBackingProperties() {
+        super.viewDidChangeBackingProperties()
+        needsLayout = true
     }
 
     /// The arm tracks the song across the record while it plays and returns to its rest otherwise.
     private func refreshArm(duration: TimeInterval) {
         if case .arm(_, true, _) = gesture { return }
         if player.isPlaying {
-            let span = TurntableScene.leadOutAngle - TurntableScene.leadInAngle
-            let angle = TurntableScene.leadInAngle + (player.progress ?? 0.1) * span
+            let span = Plan.leadOutAngle - Plan.leadInAngle
+            let angle = Plan.leadInAngle + (player.progress ?? 0.1) * span
             stage.setArm(angle: angle, lifted: false, duration: duration)
         } else {
             stage.setArm(angle: 0, lifted: true, duration: duration)
         }
-    }
-
-    private func part(at point: CGPoint) -> TurntableScene.Part? {
-        TurntableScene.part(of: hitTest(point, options: nil).first?.node)
     }
 
     // MARK: Pointer input, in this view's coordinates
@@ -99,13 +94,15 @@ final class SceneView: SCNView {
     /// Returns whether the pointer landed on something interactive.
     @discardableResult
     func pointerDown(at point: CGPoint) -> Bool {
-        switch part(at: point) {
+        switch stage.part(at: point) {
         case .arm:
-            gesture = .arm(start: point, moved: false, angle: 0)
-        case .knob:
-            gesture = .knob(startY: point.y, startVolume: player.volume)
+            gesture = .arm(start: point, moved: false, offset: stage.armAngle - stage.armAngle(toward: point))
+        case .fader:
+            gesture = .fader(startY: point.y, startVolume: player.volume)
         case .record:
             gesture = .click(.record)
+        case .button:
+            gesture = .click(.button)
         case .sleeve:
             gesture = .click(.sleeve)
         case .stack:
@@ -118,15 +115,15 @@ final class SceneView: SCNView {
 
     func pointerDragged(to point: CGPoint) {
         switch gesture {
-        case .arm(let start, let moved, let lastAngle):
+        case .arm(let start, let moved, let offset):
             guard moved || hypot(point.x - start.x, point.y - start.y) > 3 else { return }
-            let near = unprojectPoint(SCNVector3(point.x, point.y, 0))
-            let far = unprojectPoint(SCNVector3(point.x, point.y, 1))
-            let angle = stage.armAngle(from: near, to: far) ?? lastAngle
-            stage.setArm(angle: angle, lifted: false, duration: 0)
-            gesture = .arm(start: start, moved: true, angle: angle)
-        case .knob(let startY, let startVolume):
-            player.setVolume(startVolume + Double(point.y - startY) * 0.6)
+            let angle = min(max(stage.armAngle(toward: point) + offset, 0), Plan.maxArmAngle)
+            // In the hand, the arm is off the record.
+            stage.setArm(angle: angle, lifted: true, duration: 0)
+            gesture = .arm(start: start, moved: true, offset: offset)
+        case .fader(let startY, let startVolume):
+            // The fader travels a fixed distance on the desk, so a drag moves it by the same amount.
+            player.setVolume(startVolume + Double((point.y - startY) / stage.faderTravel) * 100)
         case .click, nil:
             break
         }
@@ -138,32 +135,33 @@ final class SceneView: SCNView {
         switch finished {
         case .arm(_, false, _):
             player.togglePlayPause()
-        case .arm(_, true, let angle):
+        case .arm(_, true, _):
             // Set down short of the record, the arm goes back to its rest and the music stops.
-            if angle < TurntableScene.leadInAngle - 2 {
+            let angle = stage.armAngle
+            if angle < Plan.leadInAngle - 2 {
                 player.pause()
             } else {
-                let span = TurntableScene.leadOutAngle - TurntableScene.leadInAngle
-                player.seek(toFraction: (angle - TurntableScene.leadInAngle) / span)
+                let span = Plan.leadOutAngle - Plan.leadInAngle
+                player.seek(toFraction: (angle - Plan.leadInAngle) / span)
             }
             refreshArm(duration: 0.6)
         case .click(let pressed):
-            guard part(at: point) == pressed else { return }
+            guard stage.part(at: point) == pressed else { return }
             switch pressed {
-            case .record: player.togglePlayPause()
+            case .record, .button: player.togglePlayPause()
             case .sleeve: player.next()
             case .stack: player.previous()
             default: break
             }
-        case .knob, nil:
+        case .fader, nil:
             break
         }
     }
 
-    /// Scrolling anywhere over the turntable turns the volume knob.
+    /// Scrolling anywhere over the turntable moves the volume fader.
     func scrolled(at point: CGPoint, deltaY: CGFloat) {
-        switch part(at: point) {
-        case .knob, .deck, .record, .arm:
+        switch stage.part(at: point) {
+        case .fader, .deck, .record, .arm, .button:
             player.setVolume(player.volume + Double(deltaY) * 0.5)
         case .sleeve, .stack, nil:
             break

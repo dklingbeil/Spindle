@@ -75,7 +75,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             window.ignoresMouseEvents = true
             window.setFrame(screen.frame, display: true)
             sceneView.layer?.cornerRadius = 0
-            sceneView.captionInset = screen.visibleFrame.minY - screen.frame.minY + 16
+            let (full, visible) = (screen.frame, screen.visibleFrame)
+            sceneView.insets = NSEdgeInsets(top: full.maxY - visible.maxY, left: visible.minX - full.minX,
+                                            bottom: visible.minY - full.minY, right: full.maxX - visible.maxX)
         case .window:
             window.level = floating ? .floating : .normal
             window.collectionBehavior = [.canJoinAllSpaces]
@@ -85,7 +87,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             window.setFrame(NSRect(origin: origin, size: size), display: true)
             sceneView.layer?.cornerRadius = 14
             sceneView.layer?.masksToBounds = true
-            sceneView.captionInset = 14
+            sceneView.insets = NSEdgeInsets()
         }
     }
 
